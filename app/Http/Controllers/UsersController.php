@@ -38,6 +38,8 @@ class UsersController extends Controller
       $user->update($r->all());
 
       return redirect()->to('/users')->withMessage('user updated success!!');
+    } else {
+      abort(404);
     }
   }
 }
