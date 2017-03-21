@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Database\User;
+use App\Database\Role;
 
 use Validator;
 class UsersController extends Controller
@@ -17,9 +18,11 @@ class UsersController extends Controller
   public function edit($id)
   {
     $user = User::find($id);
+    $roles = Role::get()->pluck('description', 'id')->all();
+
     if($user)
     {
-      return view('users.edit')->with('user', $user);
+      return view('users.edit')->with(['user' => $user, 'roles' => $roles]);
     }
     else
     {
@@ -30,9 +33,11 @@ class UsersController extends Controller
   public function update($id, Request $r)
   {
     $user = User::find($id);
-
     if($user) {
       $user->validate($r->all());
+      $user->update($r->all());
+
+      return redirect()->to('/users')->withMessage('user updated success!!');
     }
   }
 }

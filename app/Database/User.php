@@ -17,8 +17,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'role_id',
     ];
+
+    // Opposite to fillable
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -34,5 +37,10 @@ class User extends Authenticatable
             'name' => 'required',
             'email' => 'required|email'
         ];
+    }
+
+    public function role()
+    {
+      return $this->belongsTo('App\Database\Role', 'role_id');
     }
 }
