@@ -23,9 +23,18 @@ Route::group([ 'middleware' => ['auth']], function() {
   Route::group(['prefix' => '/users'], function() {
     Route::get('', ['as' => 'user.list', 'uses' =>'UsersController@index']);
 
-    Route::get('{id}', ['as' => 'user.edit', 'uses' =>'UsersController@edit']);
+    Route::get('{user}', ['as' => 'user.edit', 'uses' =>'UsersController@edit']);
 
-    Route::put('{id}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
+    Route::put('{user}', ['as' => 'user.update', 'uses' => 'UsersController@update']);
+
+    Route::delete('{user}', ['as' => 'user.delete', 'uses' => 'UsersController@destroy']);
   });
+
+  Route::group(['prefix' => '/roles', 'middleware' => 'only-admin'], function() {
+    Route::get('', ['as' => 'role.list', 'uses' =>'RolesController@index']);
+    Route::get('new', ['as' => 'role.create', 'uses' =>'RolesController@create']);
+    Route::post('', ['as' => 'role.save', 'uses' =>'RolesController@save']);
+  });
+
 
 });

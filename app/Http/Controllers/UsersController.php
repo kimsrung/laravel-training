@@ -15,31 +15,25 @@ class UsersController extends Controller
     return view('users.index')->with('users', $users);
   }
 
-  public function edit($id)
+  public function edit(User $user)
   {
-    $user = User::find($id);
     $roles = Role::get()->pluck('description', 'id')->all();
 
-    if($user)
-    {
-      return view('users.edit')->with(['user' => $user, 'roles' => $roles]);
-    }
-    else
-    {
-      return redirect()->to('/users');
-    }
+    return view('users.edit')->with(['user' => $user, 'roles' => $roles]);
   }
 
-  public function update($id, Request $r)
+  public function update(User $user, Request $r)
   {
-    $user = User::find($id);
-    if($user) {
-      $user->validate($r->all());
-      $user->update($r->all());
+    $user->validate($r->all());
+    $user->update($r->all());
 
-      return redirect()->to('/users')->withMessage('user updated success!!');
-    } else {
-      abort(404);
-    }
+    return redirect()->to('/users')->withMessage('user updated success!!');
+  }
+
+  public function destroy(User $user)
+  {
+    $user->delete();
+
+    return redirect()->route('user.list')->withMessage('user deleted successfully!!');
   }
 }

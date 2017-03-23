@@ -39,7 +39,8 @@ class RouteServiceProvider extends ServiceProvider
 
         $this->mapWebRoutes();
 
-        //
+        $this->mapParameters();
+
     }
 
     /**
@@ -75,5 +76,25 @@ class RouteServiceProvider extends ServiceProvider
         ], function ($router) {
             require base_path('routes/api.php');
         });
+    }
+
+    protected function mapParameters()
+    {
+      Route::bind('{user}', function ($id) {
+        return $this->find(\App\Database\User::class, $id);
+      });
+
+      Route::bind('{role}', function ($id) {
+        return $this->find(\App\Database\Role::class, $id);
+      });
+    }
+
+    protected function find($model, $id)
+    {
+      $model = $model::find($id);
+      if($model) {
+        return $model;
+      }
+      abort(404);
     }
 }
