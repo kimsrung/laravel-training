@@ -21,9 +21,9 @@ class RolesController extends Controller
 
   public function save(Request $r)
   {
-    $role = new Role();
+    $role = new Role($r->all());
     $role->validate($r->all());
-    $role->save($r->all());
+    $role->save();
 
     return redirect()->to('/roles')->withMessage('role updated success!!');
   }
